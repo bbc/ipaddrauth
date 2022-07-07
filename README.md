@@ -53,7 +53,7 @@ rule = {"regex": "admin",        "action": "deny",   "networks": ["0.0.0.0/0"] }
 
 # Operation
 
-Rules defined in keystone.conf are evaulated in order
-The first rule which matches a permit or deny action takes effect
-If no rules match an implicit deny action applies
-If no headers indicating the originating IP are present the action is to deny login
+- Rules defined in keystone.conf are evaulated in order
+- The first rule which matches a permit or deny action takes effect
+- If no rules match an implicit deny action applies
+- If no headers indicating the originating IP are present the action is to deny login
