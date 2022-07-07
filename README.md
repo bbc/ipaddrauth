@@ -26,6 +26,8 @@ Validate the installation as follows by installing entry-point-inspector with pi
 +------------+--------------------------------+------------+----------------------+-------+
 ```
 
+To work with Horizon a patch must be applied https://review.opendev.org/c/openstack/horizon/+/838859
+
 ## Configuration
 ```
 An example of what is needed in keystone.conf to make this work
