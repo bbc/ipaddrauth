@@ -34,13 +34,14 @@ CONF.register_opt(cfg.BoolOpt('deny_if_no_forwarded', default=True), group='ippa
 
 
 def _test_user_and_address(rules, ip, user):
+    # evaluate each rule in order
     for rule in rules:
-        # the username must match the allowed pattern
 
+        # the username must match the allowed pattern
         if not re.match(rule['regex'], user):
             continue
 
-        # evaulate each rule in order
+        # evaulate each network
         for network in rule['networks']:
             if ipaddress.ip_address(ip) in ipaddress.ip_network(network):
                 if rule['action'] == 'permit':
