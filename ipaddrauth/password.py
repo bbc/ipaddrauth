@@ -32,28 +32,6 @@ CONF = cfg.CONF
 CONF.register_opt(cfg.MultiStrOpt('rule', default=[]), group='ippassword')
 CONF.register_opt(cfg.BoolOpt('deny_if_no_forwarded', default=True, group='ippassword')
 
-"""
-An example of what is needed in keystone.conf to make this work
-
-[auth]
-methods = password,token,application_credential"
-
-# override the password method to use the IPPassword implementation
-password = ippassword
-
-[ippassword]
-# define an ordered ruleset to permit or deny usernames based on originating IP
-# example allows any user on rfc1918 networks
-          allows usernames starting "safe_admin_" from rfc1918 and a specified subnet (maybe these use TOTP)
-          explicity denies the admin user from all other addresses
-          implicity denies all other users who match no previous rules
-rule = {"regex": ".*",           "action": "permit", "networks": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"] }
-rule = {"regex": "^safe_admin_", "action": "permit", "networks": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "1.2.3.0/24"] }
-rule = {"regex": "admin",        "action": "deny",   "networks": ["0.0.0.0/0"] }
-
-# set to False to allow login attempts with a missing Forwarded or X-Forwarded-For header
-# deny_if_no_forwarded = False
-"""
 
 def _test_user_and_address(rules, ip, user):
     for rule in rules:
