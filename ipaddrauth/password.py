@@ -30,7 +30,7 @@ LOG = log.getLogger(__name__)
 CONF = cfg.CONF
 
 CONF.register_opt(cfg.MultiStrOpt('rule', default=[]), group='ippassword')
-CONF.register_opt(cfg.BoolOpt('deny_if_no_forwarded', default=True, group='ippassword')
+CONF.register_opt(cfg.BoolOpt('deny_if_no_forwarded', default=True), group='ippassword')
 
 
 def _test_user_and_address(rules, ip, user):
