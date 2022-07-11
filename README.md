@@ -14,6 +14,24 @@ authentication.
 
 Install with pip into the same python environment as the keystone service.
 
+## Installation with OpenStack-Ansible
+
+Use the following override in user_variables.yml adjusting the rules as required:
+
+```sh
+keystone_user_pip_packages:
+ - git+https://github.com/bbc/ipaddrauth@master#egg=ipaddrauth
+
+keystone_keystone_conf_overrides:
+  auth:
+    password: "ippassword"
+  ippassword:
+    rule:
+      ? '{"regex": ".*",           "action": "permit", "networks": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"] }'
+      ? '{"regex": "^safe_admin_", "action": "permit", "networks": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "1.2.3.0/24"] }'
+      ? '{"regex": "admin",        "action": "deny",   "networks": ["0.0.0.0/0"] }'
+```
+
 Validate the installation as follows by installing entry-point-inspector with pip:
 
 ```sh
