@@ -10,11 +10,11 @@ a set of user defined rules. If the validation passes, the Password base
 class implementation is called to perform the original username/password
 authentication.
 
-## Installation
+## Manual Installation
 
 Install with pip into the same python environment as the keystone service.
 
-## Installation with OpenStack-Ansible
+## Installation and configuration with OpenStack-Ansible
 
 Use the following override in user_variables.yml adjusting the rules as required:
 
@@ -32,6 +32,8 @@ keystone_keystone_conf_overrides:
       ? '{"regex": "admin",        "action": "deny",   "networks": ["0.0.0.0/0"] }'
 ```
 
+## Validate Installation
+
 Validate the installation as follows by installing entry-point-inspector with pip:
 
 ```sh
@@ -46,7 +48,10 @@ Validate the installation as follows by installing entry-point-inspector with pi
 
 To work with Horizon a patch must be applied https://review.opendev.org/c/openstack/horizon/+/838859
 
-## Configuration
+## Manual Configuration
+
+Configure /etc/keystone/keystone.conf as follows if not using OpenStack-Ansible:
+
 ```
 [auth]
 methods = password,token,application_credential
