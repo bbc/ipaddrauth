@@ -89,4 +89,4 @@ class IPPassword(password.Password):
         else:
             _test_user_and_address(rules, forwarded_ip, auth_payload['user']['name'])
 
-        return super().authenticate(self, auth_payload)
+        return super().authenticate(auth_payload)
