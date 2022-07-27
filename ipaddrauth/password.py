@@ -15,6 +15,7 @@
 import flask
 
 from keystone.auth.plugins import password
+from keystone.common import provider_api
 
 from keystone import exception
 from keystone.i18n import _
@@ -28,6 +29,7 @@ import re
 
 LOG = log.getLogger(__name__)
 CONF = cfg.CONF
+PROVIDERS = provider_api.ProviderAPIs
 
 CONF.register_opt(cfg.MultiStrOpt('rule', default=[]), group='ippassword')
 CONF.register_opt(cfg.BoolOpt('deny_if_no_forwarded', default=True), group='ippassword')
@@ -65,6 +67,13 @@ class IPPassword(password.Password):
 
         LOG.debug("IPPassword request headers %s", flask.request.headers)
 
+        # handle the case when a user ID is given instead of a user name
+        user_name = auth_payload['user'].get('name')
+        user_id = auth_payload['user'].get('id')
+        if not user_name:
+          user_ref = PROVIDERS.identity_api.get_user(user_id)
+          user_name = user_ref['name']
+
         # load rules from config
         # where can this be done once at startup?
         # needs some error handling for bad input
@@ -83,10 +92,10 @@ class IPPassword(password.Password):
 
         if forwarded_ip == None:
             if CONF.ippassword.deny_if_no_forwarded:
-                LOG.debug("IP check denied user %s as no Forwarded or X-Forwarded-For header available to evaluate", auth_payload['user']['name'])
+                LOG.debug("IP check denied user %s as no Forwarded or X-Forwarded-For header available to evaluate", user_name)
                 msg = _('Invalid username or password')
                 raise exception.Unauthorized(msg)
         else:
-            _test_user_and_address(rules, forwarded_ip, auth_payload['user']['name'])
+            _test_user_and_address(rules, forwarded_ip, user_name)
 
         return super().authenticate(auth_payload)
